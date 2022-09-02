@@ -1,22 +1,15 @@
-import React,{Component} from "react";
+import React from "react";
 
 
-class Image extends Component{ 
 
+const Image =(props) =>{
 
-// needs to be a pure function function 
-
-    render(){
-
-        return <div>
-
-            <img
-              crossOrigin="anonymous"
-              className = "testing" src={`http://localhost:8000/${this.props.image}`} alt="testing"/>
-        </div>
-    }
-
-
+    return <div>
+        <img 
+            className="thermoImage"
+            crossOrigin= "anonymous"
+            src={`http://localhost:8000/${props.image}`} alt="testing" />
+    </div>
 }
 
 
