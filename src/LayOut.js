@@ -1,29 +1,67 @@
-import React from "react";
+import React, { Component } from "react";
+import Image from "./Image";
 
-const  LayOut =  ()=>{
 
-    if(!localStorage.getItem("thermostatsObjects") ){
+class  LayOut extends Component{
 
-          fetch("http://localhost:8000/random", {
-           headers: {
-               'Content-Type': 'application/json',
-               'Access-Control-Allow-Origin': '*'
-             },
-       }).then( response => response.json()).then( data => setToLocalStorage(data))
-            
+    // 
+
+    state = {
+        thermoStatObject: null,
+        index: 1,
+        currentThermoImageUrl: null
     }
 
-    function setToLocalStorage (data){
+    componentDidMount (){
 
-        localStorage.setItem("thermostatsObjects", JSON.stringify(data))
-        localStorage.setItem("index", 1)
+            this.fetchThermostats()
 
     }
 
-    return <div>
-        <p> replace with other componets</p>
-    </div>
+    // fetches all thermostats 
+    fetchThermostats =  async () => {
+
+        let thermoResponse = await fetch("http://localhost:8000/random", {
+            headers: {
+                'Content-Type': 'application/json',
+              },})
+
+           let  thermoObject = await thermoResponse.json()
+
+
+           this.updateThermostatStates(thermoObject, this.state.index)
+ 
+     }
+
+
+     // updates state 
+     updateThermostatStates =(data, index)=>{
+ 
+         this.setState({currentThermoImageUrl: data[index].image, thermoStatObject: data})
+        
+    }
+
+    // onclick function for getting the image of the next theromostat
+    // needs logic for when you have no more theromostats to look at 
+    getNextThermoImage =()=>{
+
+
+        this.setState({index: this.state.index + 1})
+
+        this.updateThermostatStates(this.state.thermoStatObject, this.state.index + 1)
+    }
+
+    render(){
+
+        return <div>
+
+            <Image image={this.state.currentThermoImageUrl} />
+
+            <button onClick={this.getNextThermoImage}> click me</button>
+
+        </div>
+    }
+
 }
-
 
 export default LayOut 
