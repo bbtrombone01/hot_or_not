@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Image from "./Image";
-
+import HotButton from "./HotButton";
+import HotOrNotTitle from "./HotOrNotTilte";
+import NotButton from "./NotButton";
 
 class  LayOut extends Component{
 
@@ -55,9 +57,20 @@ class  LayOut extends Component{
 
         return <div>
 
+            <HotOrNotTitle />
+
             <Image image={this.state.currentThermoImageUrl} />
 
-            <button onClick={this.getNextThermoImage}> click me</button>
+            <div className="VotingOptionsContainer">
+
+                <HotButton />
+
+                <NotButton />
+
+            </div>
+
+
+            {/* <button onClick={this.getNextThermoImage}> click me</button> */}
 
         </div>
     }

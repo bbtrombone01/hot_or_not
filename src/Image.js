@@ -1,10 +1,8 @@
 import React from "react";
 
-
-
 const Image =(props) =>{
 
-    return <div>
+    return <div className="thermoImageParent">
         <img 
             className="thermoImage"
             crossOrigin= "anonymous"
