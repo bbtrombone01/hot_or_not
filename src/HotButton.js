@@ -2,11 +2,12 @@ import React from "react";
 import Hot from "../src/stockImages/hot-button.png"
 
 
-const HotButton =()=>{
+const HotButton =(props)=>{
 
-    return <div >
+    // debugger
+    return <div  >
 
-        <img className="votingOption" src={Hot} alt="working" />
+        <img onClick={props.onClick} className="votingOption" src={Hot} alt="hot" />
 
     </div>
 }

@@ -3,11 +3,11 @@ import Cold from "../src/stockImages/not-button.png"
 
 
 
-const NotButton = ()=>{
+const NotButton = (props)=>{
 
 
     return <div>
-        <img className="votingOption" src={Cold} alt ="testing3"/>
+        <img onClick={props.onClick} className="votingOption" src={Cold} alt ="not"/>
     </div>
 }
 
