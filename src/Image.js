@@ -6,7 +6,7 @@ const Image =(props) =>{
         <img 
             className="thermoImage"
             crossOrigin= "anonymous"
-            src={`http://localhost:8000/${props.image}`} alt="testing" />
+            src={`https://whispering-ridge-23084.herokuapp.com/${props.image}`} alt="testing" />
     </div>
 }
 

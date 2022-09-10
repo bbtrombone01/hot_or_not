@@ -3,6 +3,7 @@ import Image from "./Image";
 import HotButton from "./HotButton";
 import HotOrNotTitle from "./HotOrNotTilte";
 import NotButton from "./NotButton";
+import VotingResults from "./VotingResults";
 
 class  LayOut extends Component{
 
@@ -25,13 +26,12 @@ class  LayOut extends Component{
     // fetches all thermostats 
     fetchThermostats =  async () => {
 
-        let thermoResponse = await fetch("http://localhost:8000/random", {
+        let thermoResponse = await fetch("https://whispering-ridge-23084.herokuapp.com/random", {
             headers: {
                 'Content-Type': 'application/json',
               },})
 
            let  thermoObject = await thermoResponse.json()
-
 
            this.updateThermostatStates(thermoObject, this.state.index)
  
@@ -40,6 +40,8 @@ class  LayOut extends Component{
 
      // updates state 
      updateThermostatStates =(data, index)=>{
+
+        // debugger
  
          this.setState({currentThermoImageUrl: data[index].image, thermoStatObject: data, currentThermoHot: data[index]["hot"], currentThermoNot: data[index]["not"]})
         
@@ -50,15 +52,28 @@ class  LayOut extends Component{
     getNextThermoImage =()=>{
 
 
-        this.setState({index: this.state.index + 1, voted: false})
+        // debugger  
 
-        this.updateThermostatStates(this.state.thermoStatObject, this.state.index + 1)
+            if(this.state.thermoStatObject[this.state.index]){
+
+                        this.setState({index: this.state.index + 1, voted: false})
+                
+                        this.updateThermostatStates(this.state.thermoStatObject, this.state.index + 1)
+            }else {
+
+                alert("you have run out of thermostats")
+
+            }
+
+    
     }
 
     vote =(event)=>{
 
         this.setState({voted: true})
+
         this.postRequest(event)
+
     }
 
 
@@ -70,12 +85,9 @@ class  LayOut extends Component{
 
         test = test[1]
 
-
         let newHot = this.state.currentThermoHot
 
         let newNot = this.state.currentThermoNot
-
-        // debugger
 
         if(event.target.alt === "hot"){
            newHot = this.state.currentThermoHot + 1
@@ -85,10 +97,9 @@ class  LayOut extends Component{
             newNot = this.state.currentThermoNot + 1
         }
 
-        // debugger
 
 
-        fetch(`http://localhost:8000/increment`, {
+        fetch(`https://whispering-ridge-23084.herokuapp.com/increment`, {
             method: "PATCH",
             headers: { "Content-type": "application/json"},
             body: JSON.stringify({
@@ -96,12 +107,19 @@ class  LayOut extends Component{
                 hot: newHot,
                 not: newNot
             })
-        }).then( res => res.json()).then(data => console.log(data))
+        }).then( res => res.json())
+        .then(data => this.updateHotOrNotState(data))
+    }
+
+    updateHotOrNotState = (data)=> {
+
+        this.setState({currentThermoHot: data["hot"], currentThermoNot: data["not"] })
     }
 
     render(){
 
         let voted = this.state.voted
+
 
        const renderAction =()=>{
 
@@ -115,35 +133,28 @@ class  LayOut extends Component{
         </div> )
         }else {
 
-            return <div>
+            return <div >
 
-                <button onClick={this.getNextThermoImage}> click me</button> 
+                <VotingResults hot ={this.state.currentThermoHot} not ={this.state.currentThermoNot}/>
+
+                <div className="displayvotingResults">
+
+                <button className="nextThermostatButton" onClick={this.getNextThermoImage}> next</button> 
+                
+                </div>
+
             </div> 
         }
+
        }
 
-    
-
         return <div>
-
-       
 
             <HotOrNotTitle />
 
             <Image image={this.state.currentThermoImageUrl} />
 
-             
-            {/* <div className="VotingOptionsContainer">
-
-                <HotButton />
-
-                <NotButton />
-
-            </div> */}
              {renderAction()}
-
-
-            {/* <button onClick={this.getNextThermoImage}> click me</button> */}
 
         </div>
     }

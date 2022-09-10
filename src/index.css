@@ -45,6 +45,15 @@ body {
   height: 100%;
 }
 
+.displayvotingResults{
+  display: flex;
+  justify-content: center;
+}
+
+.nextThermostatButton{
+  width: 25%;
+}
+
 @media screen and (max-width:800px) {
 
   .thermoImage{
@@ -55,4 +64,6 @@ body {
   }
   
 }
+
+
 
