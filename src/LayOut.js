@@ -52,7 +52,7 @@ class  LayOut extends Component{
     getNextThermoImage =()=>{
 
 
-  
+        // debugger  
 
             if(this.state.thermoStatObject[this.state.index]){
 
