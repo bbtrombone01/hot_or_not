@@ -56,3 +56,13 @@ body {
   
 }
 
+.nextButton {
+  width: 25%;
+  text-align: center;
+}
+.VotingInfoContainer{
+
+  text-align: -webkit-center;
+}
+
+

@@ -133,13 +133,16 @@ class  LayOut extends Component{
         </div> )
         }else {
 
-            return <div >
+    return <div className="VotingInfoContainer" >
 
+                
                 <VotingResults hot ={this.state.currentThermoHot} not ={this.state.currentThermoNot}/>
 
-                <div className="displayvotingResults">
+             
 
-                <button className="nextThermostatButton" onClick={this.getNextThermoImage}> next</button> 
+                <div >
+
+                    <button className="nextButton" onClick={this.getNextThermoImage}> next</button> 
                 
                 </div>
 
