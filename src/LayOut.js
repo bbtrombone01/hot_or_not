@@ -18,7 +18,7 @@ class  LayOut extends Component{
     }
 
     componentDidMount (){
-
+        
             this.fetchThermostats()
 
     }
@@ -26,40 +26,50 @@ class  LayOut extends Component{
     // fetches all thermostats 
     fetchThermostats =  async () => {
 
-        let thermoResponse = await fetch("https://whispering-ridge-23084.herokuapp.com/random", {
-            headers: {
-                'Content-Type': 'application/json',
-              },})
 
-           let  thermoObject = await thermoResponse.json()
+        // will fetch all of the thermostats,  does not run if the user refershes the page 
+        if(!sessionStorage["thermostat"]){
 
-           this.updateThermostatStates(thermoObject, this.state.index)
- 
+            let thermoResponse = await fetch("https://whispering-ridge-23084.herokuapp.com/random", {
+                headers: {
+                    'Content-Type': 'application/json',
+                  },})
+    
+               let  thermoObject = await thermoResponse.json()
+    
+    
+    
+    
+               sessionStorage.setItem("thermostat", JSON.stringify(thermoObject))
+            
+        } 
+
      }
 
 
      // updates state 
      updateThermostatStates =(data, index)=>{
 
-        // debugger
+   
  
          this.setState({currentThermoImageUrl: data[index].image, thermoStatObject: data, currentThermoHot: data[index]["hot"], currentThermoNot: data[index]["not"]})
         
     }
 
     // onclick function for getting the image of the next theromostat
-    // needs logic for when you have no more theromostats to look at 
     getNextThermoImage =()=>{
 
+    
 
-        // debugger  
+    
 
             if(this.state.thermoStatObject[this.state.index]){
 
                         this.setState({index: this.state.index + 1, voted: false})
                 
-                        this.updateThermostatStates(this.state.thermoStatObject, this.state.index + 1)
-            }else {
+            } 
+            
+            if(this.state.thermoStatObject[this.state.index +1] === undefined ){
 
                 alert("you have run out of thermostats")
 
@@ -79,15 +89,22 @@ class  LayOut extends Component{
 
     postRequest =(event)=> {
 
-        let test = this.state.currentThermoImageUrl
 
+        // debugger
+
+
+        
+        let test = this.state.thermoStatObject[this.state.index]["image"]
+        
         test = test.split("uploads/")
-
+        
         test = test[1]
 
-        let newHot = this.state.currentThermoHot
+   
+        
+        let newHot = this.state.thermoStatObject[this.state.index]["hot"]
 
-        let newNot = this.state.currentThermoNot
+        let newNot = this.state.thermoStatObject[this.state.index]["not"]
 
         if(event.target.alt === "hot"){
            newHot = this.state.currentThermoHot + 1
@@ -96,6 +113,8 @@ class  LayOut extends Component{
         }else {
             newNot = this.state.currentThermoNot + 1
         }
+
+   
 
 
 
@@ -113,10 +132,25 @@ class  LayOut extends Component{
 
     updateHotOrNotState = (data)=> {
 
+   
+
         this.setState({currentThermoHot: data["hot"], currentThermoNot: data["not"] })
     }
 
     render(){
+
+
+        const renderImage =()=>{
+
+            if(sessionStorage.thermostat){
+                
+                return <Image index={this.state.index} />
+            }
+
+        }
+     
+
+        
 
         let voted = this.state.voted
 
@@ -155,9 +189,9 @@ class  LayOut extends Component{
 
             <HotOrNotTitle />
 
-            <Image image={this.state.currentThermoImageUrl} />
+        <Image index={this.state.index} />
 
-             {renderAction()}
+             {/* {renderAction()} */}
 
         </div>
     }
