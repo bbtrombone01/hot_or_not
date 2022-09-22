@@ -9,15 +9,15 @@ class  LayOut extends Component{
 
 
     state = {
-        thermoStatObject: null,
         index: 1,
-        currentThermoImageUrl: null,
         currentThermoNot: 0,
         currentThermoHot: 0,
-        voted: false
+        voted: false,
+        fetched: false 
     }
 
     componentDidMount (){
+
         
             this.fetchThermostats()
 
@@ -37,21 +37,22 @@ class  LayOut extends Component{
     
                let  thermoObject = await thermoResponse.json()
     
-    
-    
-    
                sessionStorage.setItem("thermostat", JSON.stringify(thermoObject))
             
         } 
+    
+        // do not remove, this cause state change, <Image needs for state change to bring up image instead of alt
+
+        this.setState({fetched: true})
 
      }
+
+
 
 
      // updates state 
      updateThermostatStates =(data, index)=>{
 
-   
- 
          this.setState({currentThermoImageUrl: data[index].image, thermoStatObject: data, currentThermoHot: data[index]["hot"], currentThermoNot: data[index]["not"]})
         
     }
@@ -60,22 +61,16 @@ class  LayOut extends Component{
     getNextThermoImage =()=>{
 
     
+    if(JSON.parse(sessionStorage["thermostat"])[this.state.index + 1] === undefined ){
+        
+        alert("you have run out of thermostats")
+        
+    }else {
+               
+             this.setState({index: this.state.index + 1, voted: false})
+           
+         }
 
-    
-
-            if(this.state.thermoStatObject[this.state.index]){
-
-                        this.setState({index: this.state.index + 1, voted: false})
-                
-            } 
-            
-            if(this.state.thermoStatObject[this.state.index +1] === undefined ){
-
-                alert("you have run out of thermostats")
-
-            }
-
-    
     }
 
     vote =(event)=>{
@@ -88,35 +83,26 @@ class  LayOut extends Component{
 
 
     postRequest =(event)=> {
-
-
-        // debugger
-
-
         
-        let test = this.state.thermoStatObject[this.state.index]["image"]
+        let test = JSON.parse(sessionStorage["thermostat"])[this.state.index]["image"]
         
         test = test.split("uploads/")
         
         test = test[1]
-
-   
         
-        let newHot = this.state.thermoStatObject[this.state.index]["hot"]
+        let newHot = JSON.parse(sessionStorage["thermostat"])[this.state.index]["hot"]
 
-        let newNot = this.state.thermoStatObject[this.state.index]["not"]
+        let newNot = JSON.parse(sessionStorage["thermostat"])[this.state.index]["not"]
 
         if(event.target.alt === "hot"){
-           newHot = this.state.currentThermoHot + 1
+           newHot ++
 
             
         }else {
-            newNot = this.state.currentThermoNot + 1
+
+            newNot ++
+
         }
-
-   
-
-
 
         fetch(`https://whispering-ridge-23084.herokuapp.com/increment`, {
             method: "PATCH",
@@ -132,25 +118,20 @@ class  LayOut extends Component{
 
     updateHotOrNotState = (data)=> {
 
+            this.setState({currentThermoHot: data["hot"], currentThermoNot: data["not"] })
    
-
-        this.setState({currentThermoHot: data["hot"], currentThermoNot: data["not"] })
-    }
+        }
 
     render(){
 
-
         const renderImage =()=>{
 
-            if(sessionStorage.thermostat){
+            if(this.state.fetched){
                 
                 return <Image index={this.state.index} />
             }
 
         }
-     
-
-        
 
         let voted = this.state.voted
 
@@ -160,19 +141,16 @@ class  LayOut extends Component{
         if(!voted){
             return  (<div className="VotingOptionsContainer">
 
-            <HotButton onClick={this.vote} postReq ={this.postRequest} />
+            <HotButton onClick={this.vote}  />
 
-            <NotButton onClick={this.vote} postReq={this.postRequest} />
+            <NotButton onClick={this.vote} />
 
         </div> )
         }else {
 
     return <div className="VotingInfoContainer" >
-
                 
                 <VotingResults hot ={this.state.currentThermoHot} not ={this.state.currentThermoNot}/>
-
-             
 
                 <div >
 
@@ -189,9 +167,9 @@ class  LayOut extends Component{
 
             <HotOrNotTitle />
 
-        <Image index={this.state.index} />
+             {renderImage()}
 
-             {/* {renderAction()} */}
+             {renderAction()}
 
         </div>
     }

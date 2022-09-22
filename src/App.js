@@ -4,9 +4,11 @@ import LayOut from './LayOut'
 
 function App() {
   return (
-    <div className="App">
-      <LayOut/>
-    </div>
+
+      <div className="App">
+        <LayOut/>
+      </div>
+ 
   );
 }
 
