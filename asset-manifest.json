@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/hot_or_not/static/css/main.09e33008.css",
+    "main.js": "/hot_or_not/static/js/main.66095732.js",
+    "static/media/page-bg.png": "/hot_or_not/static/media/page-bg.261693d112d6e421d817.png",
+    "static/media/hot-or-not-title.png": "/hot_or_not/static/media/hot-or-not-title.091fa1058cb9d1bd236a.png",
+    "static/media/not-button.png": "/hot_or_not/static/media/not-button.16a65c3905c2e0d06a74.png",
+    "static/media/hot-button.png": "/hot_or_not/static/media/hot-button.17cee37a435166a8ecec.png",
+    "index.html": "/hot_or_not/index.html",
+    "main.09e33008.css.map": "/hot_or_not/static/css/main.09e33008.css.map",
+    "main.66095732.js.map": "/hot_or_not/static/js/main.66095732.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.09e33008.css",
+    "static/js/main.66095732.js"
+  ]
+}
